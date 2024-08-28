@@ -72,13 +72,21 @@
     <script>
         // Whitelisted usernames and passwords
         const users = {
-            "Harrison": "13",
+            "Harrison": "pass 13",
             "Savya": "default",
-            "Gabriel": "default"
+            "Gabriel": "default",
             "James": "default"
         };
 
-        // Handling the login
+        // Check login status on page load
+        function checkLoginStatus() {
+            if (sessionStorage.getItem('loggedIn') === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('terminalContainer').style.display = 'block';
+            }
+        }
+
+        // Handle login form submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
@@ -94,7 +102,7 @@
             }
         });
 
-        // Handling terminal commands
+        // Handle terminal commands
         document.getElementById('terminalForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const command = document.getElementById('command').value.trim();
@@ -108,11 +116,9 @@
             }
         });
 
-        // Redirect to terminal if already logged in
-        if (sessionStorage.getItem('loggedIn')) {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('terminalContainer').style.display = 'block';
-        }
+        // Check login status on page load
+        checkLoginStatus();
     </script>
 </body>
 </html>
+
