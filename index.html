@@ -43,30 +43,16 @@
         input[type="submit"]:hover {
             background-color: #28cc28;
         }
-        .terminal {
-            display: none;
-        }
     </style>
 </head>
 <body>
-    <div class="container" id="loginContainer">
+    <div class="container">
         <h2>Login</h2>
         <form id="loginForm">
             <input type="text" id="username" placeholder="Username" required><br>
             <input type="password" id="password" placeholder="Password" required><br>
             <input type="submit" value="Login">
         </form>
-    </div>
-
-    <div class="container terminal" id="terminalContainer">
-        <h2>Terminal</h2>
-        <p>This is the portal to da gaems</p>
-        <p>Type your command:</p>
-        <form id="terminalForm">
-            <input type="text" id="command" placeholder="Enter command" required><br>
-            <input type="submit" value="Execute">
-        </form>
-        <p id="errorMessage" style="color:red;"></p>
     </div>
 
     <script>
@@ -78,47 +64,19 @@
             "James": "default"
         };
 
-        // Check login status on page load
-        function checkLoginStatus() {
-            if (sessionStorage.getItem('loggedIn') === 'true') {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('terminalContainer').style.display = 'block';
-            }
-        }
-
-        // Handle login form submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             if (users[username] && users[username] === password) {
-                // Successful login, show terminal
-                sessionStorage.setItem('loggedIn', 'true');
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('terminalContainer').style.display = 'block';
+                // Successful login, redirect with token
+                const token = btoa(`${username}:${password}`); // Simple encoding for demonstration
+                window.location.href = `https://your-username.github.io/your-main-website/?token=${token}`;
             } else {
                 alert("Access Denied! Incorrect Username or Password.");
             }
         });
-
-        // Handle terminal commands
-        document.getElementById('terminalForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const command = document.getElementById('command').value.trim();
-            const commandParts = command.split(' ');
-
-            if (commandParts[0] === 'goto' && commandParts.length === 2) {
-                const url = commandParts[1];
-                window.location.href = `https://${url}`;
-            } else {
-                document.getElementById('errorMessage').innerText = "Invalid command. Use: goto example.com";
-            }
-        });
-
-        // Check login status on page load
-        checkLoginStatus();
     </script>
 </body>
 </html>
-
