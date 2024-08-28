@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login & Terminal</title>
     <style>
         body {
             background-color: #0d0d0d;
             color: #33ff33;
             font-family: "Courier New", Courier, monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
         }
         .container {
             background-color: #1a1a1a;
@@ -21,6 +18,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px #33ff33;
             width: 300px;
+            margin: 50px auto;
         }
         input[type="text"], input[type="password"] {
             width: 100%;
@@ -43,16 +41,44 @@
         input[type="submit"]:hover {
             background-color: #28cc28;
         }
+        .terminal {
+            display: none;
+            padding: 20px;
+            height: 100vh;
+            overflow: auto;
+            border: 1px solid #33ff33;
+            margin: 0;
+        }
+        input {
+            background-color: #0d0d0d;
+            border: none;
+            color: #33ff33;
+            width: 100%;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1rem;
+            border: none;
+            outline: none;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Login Form -->
+    <div id="loginContainer" class="container">
         <h2>Login</h2>
         <form id="loginForm">
             <input type="text" id="username" placeholder="Username" required><br>
             <input type="password" id="password" placeholder="Password" required><br>
             <input type="submit" value="Login">
         </form>
+    </div>
+
+    <!-- Terminal Interface -->
+    <div id="terminalContainer" class="terminal hidden">
+        <div id="output"></div>
+        <input type="text" id="commandInput" placeholder="Enter command" autofocus>
     </div>
 
     <script>
@@ -64,20 +90,50 @@
             "James": "default"
         };
 
+        // Handle login form submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             if (users[username] && users[username] === password) {
-                // Successful login, redirect with token
-                const token = btoa(`${username}:${password}`); // Simple encoding for demonstration
-                window.location.href = `https://remoraze1.github.io/Whitelist/?token=${token}`;
+                // Successful login, show terminal and hide login form
+                document.getElementById('loginContainer').classList.add('hidden');
+                document.getElementById('terminalContainer').classList.remove('hidden');
+                sessionStorage.setItem('loggedIn', 'true');
             } else {
                 alert("Access Denied! Incorrect Username or Password.");
             }
         });
+
+        // Terminal command handling
+        document.getElementById('commandInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const input = e.target.value.trim();
+                if (input.startsWith('goto ')) {
+                    const url = input.substring(5).trim();
+                    window.location.href = url;
+                } else {
+                    appendOutput(`Unknown command: ${input}`);
+                }
+                e.target.value = ''; // Clear input
+            }
+        });
+
+        function appendOutput(text) {
+            const output = document.getElementById('output');
+            output.innerHTML += `<div>${text}</div>`;
+            output.scrollTop = output.scrollHeight; // Scroll to bottom
+        }
+
+        // Redirect to login if session is not set
+        if (!sessionStorage.getItem('loggedIn')) {
+            document.getElementById('loginContainer').classList.remove('hidden');
+            document.getElementById('terminalContainer').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
+
 
