@@ -3,141 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Terminal</title>
+    <title>Hacker-Themed Login</title>
     <style>
         body {
-            background-color: #0d0d0d;
-            color: #33ff33;
-            font-family: "Courier New", Courier, monospace;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            background-color: #1a1a1a;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #33ff33;
-            width: 300px;
-            margin: 50px auto;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #0d0d0d;
-            border: 1px solid #33ff33;
-            color: #33ff33;
-            border-radius: 5px;
-        }
-        input[type="submit"] {
-            background-color: #33ff33;
-            color: #0d0d0d;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-        input[type="submit"]:hover {
-            background-color: #28cc28;
-        }
-        .terminal {
-            display: none;
-            padding: 20px;
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            overflow: auto;
-            border: 1px solid #33ff33;
             margin: 0;
         }
-        input {
-            background-color: #0d0d0d;
-            border: none;
-            color: #33ff33;
-            width: 100%;
-            font-family: "Courier New", Courier, monospace;
-            font-size: 1rem;
-            border: none;
-            outline: none;
+
+        .login-container {
+            text-align: center;
+            border: 2px solid #00ff00;
+            padding: 30px;
+            border-radius: 5px;
+            width: 300px;
+            box-shadow: 0 0 15px #00ff00;
         }
-        .hidden {
+
+        .login-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .login-container input {
+            background-color: #000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .login-container button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container button:hover {
+            background-color: #00cc00;
+        }
+
+        .error-message {
+            color: #ff0000;
+            font-size: 14px;
+            margin-bottom: 20px;
             display: none;
         }
     </style>
 </head>
 <body>
-    <!-- Login Form -->
-    <div id="loginContainer" class="container">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required><br>
-            <input type="password" id="password" placeholder="Password" required><br>
-            <input type="submit" value="Login">
-        </form>
-    </div>
-
-    <!-- Terminal Interface -->
-    <div id="terminalContainer" class="terminal">
-        <div id="output"></div>
-        <input type="text" id="commandInput" placeholder="Enter command" autofocus>
+    <div class="login-container">
+        <h1>System Login</h1>
+        <div id="error" class="error-message">Invalid username or password!</div>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Access</button>
     </div>
 
     <script>
-        // Whitelisted usernames and passwords
-        const users = {
-            "Harrison": "pass 13",
-            "Savya": "default",
-            "Gabriel": "default",
-            "James": "default"
+        // Whitelisted username and password pairs
+        const whitelist = {
+            "hacker123": "password123",
+            "admin": "letmein",
+            "user": "qwerty"
         };
 
-        // Handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            if (users[username] && users[username] === password) {
-                // Successful login, show terminal and hide login form
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('terminalContainer').style.display = 'block';
-                sessionStorage.setItem('loggedIn', 'true');
+            if (whitelist[username] === password) {
+                document.body.innerHTML = '<h1>Access Granted</h1><p>Welcome, ' + username + '!</p><div id="content">Protected Content Loading...</div>';
+                setTimeout(() => {
+                    document.getElementById('content').innerHTML = '<p>Your protected website content goes here.</p>';
+                }, 1000);
             } else {
-                alert("Access Denied! Incorrect Username or Password.");
+                document.getElementById('error').style.display = 'block';
             }
-        });
-
-        // Terminal command handling
-        document.getElementById('commandInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const input = e.target.value.trim();
-                if (input.startsWith('goto ')) {
-                    const url = input.substring(5).trim();
-                    window.location.href = url;
-                } else {
-                    appendOutput(`Unknown command: ${input}`);
-                }
-                e.target.value = ''; // Clear input
-            }
-        });
-
-        function appendOutput(text) {
-            const output = document.getElementById('output');
-            output.innerHTML += `<div>${text}</div>`;
-            output.scrollTop = output.scrollHeight; // Scroll to bottom
-        }
-
-        // Redirect to login if session is not set
-        if (!sessionStorage.getItem('loggedIn')) {
-            document.getElementById('loginContainer').style.display = 'block';
-            document.getElementById('terminalContainer').style.display = 'none';
-        } else {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('terminalContainer').style.display = 'block';
         }
     </script>
 </body>
 </html>
-
-
-
