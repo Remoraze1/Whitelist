@@ -76,7 +76,7 @@
     </div>
 
     <!-- Terminal Interface -->
-    <div id="terminalContainer" class="terminal hidden">
+    <div id="terminalContainer" class="terminal">
         <div id="output"></div>
         <input type="text" id="commandInput" placeholder="Enter command" autofocus>
     </div>
@@ -98,8 +98,8 @@
 
             if (users[username] && users[username] === password) {
                 // Successful login, show terminal and hide login form
-                document.getElementById('loginContainer').classList.add('hidden');
-                document.getElementById('terminalContainer').classList.remove('hidden');
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('terminalContainer').style.display = 'block';
                 sessionStorage.setItem('loggedIn', 'true');
             } else {
                 alert("Access Denied! Incorrect Username or Password.");
@@ -129,11 +129,15 @@
 
         // Redirect to login if session is not set
         if (!sessionStorage.getItem('loggedIn')) {
-            document.getElementById('loginContainer').classList.remove('hidden');
-            document.getElementById('terminalContainer').classList.add('hidden');
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('terminalContainer').style.display = 'none';
+        } else {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('terminalContainer').style.display = 'block';
         }
     </script>
 </body>
 </html>
+
 
 
