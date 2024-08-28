@@ -15,15 +15,14 @@
             height: 100vh;
             margin: 0;
         }
-        .login-container, .terminal-container {
+        .container {
             background-color: #1a1a1a;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px #33ff33;
             width: 300px;
-            display: none;
         }
-        input[type="text"], input[type="password"], input[type="submit"], input[type="command"] {
+        input[type="text"], input[type="password"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -35,15 +34,22 @@
         input[type="submit"] {
             background-color: #33ff33;
             color: #0d0d0d;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            width: 100%;
         }
         input[type="submit"]:hover {
             background-color: #28cc28;
         }
+        .terminal {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="login-container" id="loginContainer">
+    <div class="container" id="loginContainer">
         <h2>Hacker Login</h2>
         <form id="loginForm">
             <input type="text" id="username" placeholder="Username" required><br>
@@ -52,7 +58,7 @@
         </form>
     </div>
 
-    <div class="terminal-container" id="terminalContainer">
+    <div class="container terminal" id="terminalContainer">
         <h2>Terminal</h2>
         <p>Type your command:</p>
         <form id="terminalForm">
@@ -94,11 +100,18 @@
 
             if (commandParts[0] === 'goto' && commandParts.length === 2) {
                 const url = commandParts[1];
-                window.location.href = `https://${youtube.com}`;
+                window.location.href = `https://${url}`;
             } else {
                 document.getElementById('errorMessage').innerText = "Invalid command. Use: goto example.com";
             }
         });
+
+        // Redirect to terminal if already logged in
+        if (sessionStorage.getItem('loggedIn')) {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('terminalContainer').style.display = 'block';
+        }
     </script>
 </body>
 </html>
+
