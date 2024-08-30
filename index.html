@@ -3,97 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker-Themed Login</title>
+    <title>Password Protected Page</title>
     <style>
-        body {
-            background-color: #000;
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
+        body, html {
+            height: 100%;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
         }
 
-        .login-container {
+        #login-form {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             text-align: center;
-            border: 2px solid #00ff00;
-            padding: 30px;
-            border-radius: 5px;
-            width: 300px;
-            box-shadow: 0 0 15px #00ff00;
         }
 
-        .login-container h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .login-container input {
-            background-color: #000;
-            color: #00ff00;
-            border: 1px solid #00ff00;
+        #login-form input {
+            margin: 10px;
             padding: 10px;
-            width: 100%;
-            margin-bottom: 20px;
-            font-size: 16px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #222;
+            color: white;
         }
 
-        .login-container button {
-            background-color: #00ff00;
-            color: #000;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            font-size: 16px;
+        #login-form input[type="submit"] {
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            background-color: #28a745;
+            border: none;
         }
 
-        .login-container button:hover {
-            background-color: #00cc00;
-        }
-
-        .error-message {
-            color: #ff0000;
-            font-size: 14px;
-            margin-bottom: 20px;
+        #protected-content {
             display: none;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>System Login</h1>
-        <div id="error" class="error-message">Invalid username or password!</div>
+    <div id="login-form">
+        <h2>Enter Username and Password</h2>
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">Access</button>
+        <input type="submit" id="submit" value="Login">
+    </div>
+
+    <div id="protected-content">
+        <!-- Your game or protected content here -->
+        <h1>Welcome to the Game!</h1>
+        <p>This content is now unlocked.</p>
+        <!-- Add your game HTML/CSS/JS here -->
     </div>
 
     <script>
-        // Whitelisted username and password pairs
-        const whitelist = {
-            "Harrison": "13",
+        const allowedUsers = {
+            "Harrison": "pass 13",
             "Savya": "default",
             "Gabriel": "default",
-            "Gabriel": "default"
+            "James": "default"
         };
 
-        function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        document.getElementById("submit").onclick = function () {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-            if (whitelist[username] === password) {
-                document.body.innerHTML = '<h1>Access Granted</h1><p>Welcome, ' + username + '!</p><div id="content">Protected Content Loading...</div>';
-                setTimeout(() => {
-                    document.getElementById('content').innerHTML = '<p>Your protected website content goes here.</p>';
-                }, 1000);
+            if (allowedUsers[username] === password) {
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("protected-content").style.display = "block";
             } else {
-                document.getElementById('error').style.display = 'block';
+                alert("Incorrect username or password!");
             }
-        }
+        };
     </script>
 </body>
 </html>
+
