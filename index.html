@@ -3,84 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Protected Page</title>
+    <title>Slope Game</title>
     <style>
         body, html {
-            height: 100%;
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #121212;
-            color: white;
-            font-family: Arial, sans-serif;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
         }
 
-        #login-form {
-            background-color: #1a1a1a;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            text-align: center;
-        }
-
-        #login-form input {
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #333;
-            border-radius: 4px;
-            background-color: #222;
-            color: white;
-        }
-
-        #login-form input[type="submit"] {
-            cursor: pointer;
-            background-color: #28a745;
-            border: none;
-        }
-
-        #protected-content {
-            display: none;
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            background-color: white; /* Fallback color */
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Add other styling as needed */
+        }
+
+        #overlay img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #game-content {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div id="login-form">
-        <h2>Enter Username and Password</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <input type="submit" id="submit" value="Login">
+    <div id="overlay">
+        <img src="path-to-your-image.jpg" alt="Access Restricted">
     </div>
 
-    <div id="protected-content">
-        <!-- Your game or protected content here -->
-        <h1>Welcome to the Game!</h1>
-        <p>This content is now unlocked.</p>
-        <!-- Add your game HTML/CSS/JS here -->
+    <!-- Your game content -->
+    <div id="game-content">
+        <canvas id="canvas"></canvas>
+        <!-- Include your game script -->
+        <script src="gameScript.js"></script>
     </div>
 
     <script>
-        const allowedUsers = {
-            "Harrison": "pass 13",
-            "Savya": "default",
-            "Gabriel": "default",
-            "James": "default"
-        };
-
-        document.getElementById("submit").onclick = function () {
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            if (allowedUsers[username] === password) {
-                document.getElementById("login-form").style.display = "none";
-                document.getElementById("protected-content").style.display = "block";
-            } else {
-                alert("Incorrect username or password!");
+        document.addEventListener('keydown', function(event) {
+            if (event.key.toLowerCase() === 'e') {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('game-content').style.display = 'block';
             }
-        };
+        });
     </script>
 </body>
 </html>
+
 
